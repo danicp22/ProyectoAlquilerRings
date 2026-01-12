@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/estilo.css">
+    <title>Boxeo - Alquiler</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="font-size: 1.5rem; color: var(--primary);">BOXING CLUB</div>
+        <div class="nav-links">
+            <a href="/">Inicio</a>
+            {% if session.get("usuario_id") %}
+                <a href="/mis_reservas">Mis Reservas</a>
+                <a href="/logout">Salir ({{ session["usuario_nombre"] }})</a>
+            {% else %}
+                <a href="/login">Login</a>
+                <a href="/registro">Registro</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Entrena como un Profesional</h1>
+        <div class="ring-grid">
+            {% for ring in rings %}
+            <div class="card">
+                <img src="/static/{{ ring.imagen }}" alt="ring">
+                <h3>{{ ring.nombre }}</h3>
+                <p>{{ ring.descripcion }}</p>
+                <p><strong>{{ ring.precio }}€ / hora</strong></p>
+                <a href="/reservar/{{ ring.id }}" class="btn">Alquilar Ahora</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

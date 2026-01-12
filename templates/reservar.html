@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Reservar {{ ring.nombre }}</h2>
+        <form method="GET" action="/reservar/{{ ring.id }}">
+            <label>Elige una fecha para ver disponibilidad:</label><br><br>
+            <input type="date" name="fecha" value="{{ fecha }}" onchange="this.form.submit()" style="padding: 10px;">
+        </form>
+
+        {% if fecha %}
+            <h3>Horas para el {{ fecha }}:</h3>
+            <form action="/guardar_reserva" method="post" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <input type="hidden" name="id_ring" value="{{ ring.id }}">
+                <input type="hidden" name="fecha" value="{{ fecha }}">
+                
+                {% for h in horario %}
+                    {% if h in ocupadas %}
+                        <button type="button" class="btn" disabled style="background: #333;">{{ h }}:00 Ocupado</button>
+                    {% else %}
+                        <label class="btn">
+                            <input type="radio" name="hora" value="{{ h }}" required> {{ h }}:00
+                        </label>
+                    {% endif %}
+                {% endfor %}
+                <div style="grid-column: span 3; margin-top: 20px;">
+                    <input type="submit" value="Confirmar Reserva" class="btn" style="width: 100%;">
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Registro - Boxing Club</title>
+    <link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">BOXING CLUB</div>
+        <div class="nav-links">
+            <a href="/">Inicio</a>
+            <a href="/login">Login</a>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Crear Cuenta</h2>
+            <form action="/guardar_usuario" method="post">
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" name="password" required>
+                </div>
+                <input type="submit" value="REGISTRARSE" class="btn" style="width: 100%;">
+            </form>
+            <div class="form-footer">
+                ¿Ya eres miembro? <a href="/login">Inicia sesión</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

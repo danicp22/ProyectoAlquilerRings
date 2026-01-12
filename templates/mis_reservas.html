@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="/static/estilo.css"></head>
+<body>
+    <div class="container">
+        <h2>Tus Reservas</h2>
+        <table>
+            <tr><th>Ring</th><th>Fecha</th><th>Hora</th><th>Precio</th></tr>
+            {% for r in reservas %}
+            <tr>
+                <td>{{ r.nombre }}</td>
+                <td>{{ r.fecha }}</td>
+                <td>{{ r.hora }}:00</td>
+                <td>{{ r.precio }}€</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br><a href="/" class="btn">Volver al inicio</a>
+    </div>
+</body>
+</html>
