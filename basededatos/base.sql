@@ -31,5 +31,5 @@ INSERT INTO rings (nombre, descripcion, precio, imagen) VALUES
 
 
 CREATE USER "daniel"@"localhost" IDENTIFIED BY "Dani12345&";
-GRANT ALL PRIVILEGES ON *.* TO "dani"@"localhost";
+GRANT ALL PRIVILEGES ON *.* TO "daniel"@"localhost";
 FLUSH PRIVILEGES;
