@@ -13,7 +13,7 @@ body {
     line-height: 1.6;
 }
 
-/* --- NAVEGACIÓN --- */
+/*  NAVEGACIÓN  */
 .navbar {
     background: #000;
     padding: 1rem 2rem;
@@ -42,14 +42,14 @@ body {
     color: var(--primary);
 }
 
-/* --- CONTENEDORES --- */
+/*  CONTENEDORES  */
 .container {
     padding: 2rem;
     max-width: 1000px;
     margin: auto;
 }
 
-/* --- GRID DE RINGS (Página Principal) --- */
+/*  GRID DE RINGS (Página Principal)  */
 .ring-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -64,7 +64,7 @@ body {
     transition: 0.3s;
     border: 1px solid #333;
 }
-
+N
 .card:hover {
     transform: scale(1.02);
     box-shadow: 0 0 15px var(--primary);
@@ -79,7 +79,7 @@ body {
     margin-bottom: 1rem;
 }
 
-/* --- BOTONES --- */
+/*  BOTONES  */
 .btn {
     background: var(--primary);
     color: white;
@@ -103,7 +103,7 @@ body {
     opacity: 0.7;
 }
 
-/* --- FORMULARIOS (Login, Registro y Reservas) --- */
+/*  FORMULARIOS (Login, Registro y Reservas)  */
 .auth-container {
     display: flex; 
     justify-content: center; 
@@ -159,7 +159,7 @@ body {
     text-decoration: none;
 }
 
-/* --- TABLAS (Mis Reservas) --- */
+/*  TABLAS (Mis Reservas) */
 table {
     width: 100%;
     border-collapse: collapse;
