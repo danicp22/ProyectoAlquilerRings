@@ -6,6 +6,7 @@
 }
 
 body {
+    text-align: center;
     font-family: 'Arial', sans-serif;
     background-color: var(--dark);
     color: var(--text);
@@ -13,7 +14,7 @@ body {
     line-height: 1.6;
 }
 
-/*  NAVEGACIÓN  */
+/* NAVEGACIÓN  */
 .navbar {
     background: #000;
     padding: 1rem 2rem;
@@ -64,7 +65,7 @@ body {
     transition: 0.3s;
     border: 1px solid #333;
 }
-N
+
 .card:hover {
     transform: scale(1.02);
     box-shadow: 0 0 15px var(--primary);
@@ -167,6 +168,7 @@ table {
     background: var(--gray);
     border-radius: 10px;
     overflow: hidden;
+    box-shadow: 2px 2px 20px rgb(241, 109, 109);
 }
 
 th, td {
@@ -184,4 +186,19 @@ th {
 
 tr:hover {
     background: #252525;
+}
+
+
+
+
+/* FOOTER */
+
+footer{
+  width: 100%;
+  margin-top: 200px;
+}
+footer img{
+  width: 75px;
+  height: 75px;
+  filter: drop-shadow(0 0 30px white);
 }
