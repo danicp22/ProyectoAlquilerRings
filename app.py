@@ -5,9 +5,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = "clave_secreta_boxeo"
 
-# ------------------------------
+# -----------------------------
 # Conexión SQLite
-# ------------------------------
+# -----------------------------
 def conectar():
     conexion = sqlite3.connect("database.db")
     conexion.row_factory = sqlite3.Row
