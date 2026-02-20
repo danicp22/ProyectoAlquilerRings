@@ -1,23 +1,81 @@
 from flask import Flask, render_template, request, redirect, session, url_for
-import mysql.connector
+import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_boxeo"
 
+# ------------------------------
+# Conexión SQLite
+# ------------------------------
 def conectar():
-    return mysql.connector.connect(
-        host="sql310.infinityfree.com",
-        user="if0_41196647",
-        password="Dani220055",
-        database="if0_41196647_alquilerboxeo",
-        port=3306
-    )
+    conexion = sqlite3.connect("database.db")
+    conexion.row_factory = sqlite3.Row
+    return conexion
 
+# ------------------------------
+# Crear tablas y datos iniciales
+# ------------------------------
+def crear_tablas():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    
+    # Tabla usuarios
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    """)
+    
+    # Tabla rings
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS rings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            descripcion TEXT,
+            precio INTEGER,
+            imagen TEXT
+        )
+    """)
+    
+    # Tabla reservas
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS reservas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_usuario INTEGER NOT NULL,
+            id_ring INTEGER NOT NULL,
+            fecha TEXT NOT NULL,
+            hora INTEGER NOT NULL,
+            UNIQUE(id_ring, fecha, hora),
+            FOREIGN KEY(id_usuario) REFERENCES usuarios(id),
+            FOREIGN KEY(id_ring) REFERENCES rings(id)
+        )
+    """)
+    
+    # Insertar datos de ejemplo en rings si no existen
+    cursor.execute("SELECT COUNT(*) as c FROM rings")
+    if cursor.fetchone()["c"] == 0:
+        cursor.execute("""
+            INSERT INTO rings (nombre, descripcion, precio, imagen) VALUES
+            ('Ring Profesional', 'Ring oficial para competiciones', 25, 'ring1.jpg'),
+            ('Ring Entrenamiento', 'Ring para entrenamientos', 15, 'ring2.jpg')
+        """)
+    
+    conexion.commit()
+    conexion.close()
+
+crear_tablas()
+
+# ------------------------------
+# Rutas
+# ------------------------------
 @app.route("/")
 def index():
     conexion = conectar()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM rings")
     rings = cursor.fetchall()
     conexion.close()
@@ -36,9 +94,12 @@ def guardar_usuario():
     conexion = conectar()
     cursor = conexion.cursor()
     try:
-        cursor.execute("INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s)", (nombre, email, password))
+        cursor.execute(
+            "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)",
+            (nombre, email, password)
+        )
         conexion.commit()
-    except:
+    except sqlite3.IntegrityError:
         return "El email ya está registrado."
     finally:
         conexion.close()
@@ -52,9 +113,10 @@ def login():
 def login_usuario():
     email = request.form["email"]
     password = request.form["password"]
+    
     conexion = conectar()
-    cursor = conexion.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM usuarios WHERE email=%s", (email,))
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM usuarios WHERE email=?", (email,))
     usuario = cursor.fetchone()
     conexion.close()
 
@@ -75,14 +137,14 @@ def reservar(id_ring):
     
     fecha = request.args.get('fecha')
     conexion = conectar()
-    cursor = conexion.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM rings WHERE id=%s", (id_ring,))
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM rings WHERE id=?", (id_ring,))
     ring = cursor.fetchone()
     
     horas_ocupadas = []
     if fecha:
-        cursor.execute("SELECT hora FROM reservas WHERE id_ring=%s AND fecha=%s", (id_ring, fecha))
-        horas_ocupadas = [r['hora'] for r in cursor.fetchall()]
+        cursor.execute("SELECT hora FROM reservas WHERE id_ring=? AND fecha=?", (id_ring, fecha))
+        horas_ocupadas = [r["hora"] for r in cursor.fetchall()]
     
     conexion.close()
     return render_template("reservar.html", ring=ring, fecha=fecha, horario=range(9, 21), ocupadas=horas_ocupadas)
@@ -99,10 +161,13 @@ def guardar_reserva():
     conexion = conectar()
     cursor = conexion.cursor()
     try:
-        cursor.execute("INSERT INTO reservas (id_usuario, id_ring, fecha, hora) VALUES (%s,%s,%s,%s)", (id_usuario, id_ring, fecha, hora))
+        cursor.execute(
+            "INSERT INTO reservas (id_usuario, id_ring, fecha, hora) VALUES (?, ?, ?, ?)",
+            (id_usuario, id_ring, fecha, hora)
+        )
         conexion.commit()
         return redirect("/mis_reservas")
-    except:
+    except sqlite3.IntegrityError:
         return "Error: Hora ya reservada."
     finally:
         conexion.close()
@@ -110,16 +175,21 @@ def guardar_reserva():
 @app.route("/mis_reservas")
 def mis_reservas():
     if "usuario_id" not in session: return redirect("/login")
+    
     conexion = conectar()
-    cursor = conexion.cursor(dictionary=True)
+    cursor = conexion.cursor()
     cursor.execute("""
         SELECT r.fecha, r.hora, rings.nombre, rings.precio 
         FROM reservas r JOIN rings ON r.id_ring = rings.id 
-        WHERE r.id_usuario = %s ORDER BY r.fecha DESC
+        WHERE r.id_usuario = ? ORDER BY r.fecha DESC
     """, (session["usuario_id"],))
+    
     reservas = cursor.fetchall()
     conexion.close()
     return render_template("mis_reservas.html", reservas=reservas)
 
+# ------------------------------
+# Run
+# ------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
