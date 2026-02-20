@@ -10,7 +10,7 @@ def conectar():
         host="sql310.infinityfree.com",
         user="if0_41196647",
         password="Dani220055",
-        database="if0_41196647_XXX",
+        database="if0_41196647_alquilerboxeo",
         port=3306
     )
 
