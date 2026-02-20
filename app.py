@@ -7,7 +7,7 @@ app.secret_key = "clave_secreta_boxeo"
 
 def conectar():
     return mysql.connector.connect(
-        host="basededatos.kesug.com",
+        host="sql310.infinityfree.com",
         user="if0_41196647",
         password="Dani220055",
         database="if0_41196647_XXX",
