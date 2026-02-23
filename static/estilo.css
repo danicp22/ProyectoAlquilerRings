@@ -203,3 +203,91 @@ footer img{
   height: 75px;
   filter: drop-shadow(0 0 30px white);
 }
+/* ============================= */
+/* 📱 RESPONSIVE MOVIL */
+/* ============================= */
+
+@media (max-width: 768px){
+
+    /* NAVBAR */
+    .navbar{
+        flex-direction: column;
+        gap: 10px;
+        padding: 1rem;
+    }
+
+    .nav-links{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .nav-links a{
+        margin-left: 0;
+    }
+
+    /* CONTENEDOR */
+    .container{
+        padding: 1rem;
+    }
+
+    /* GRID */
+    .ring-grid{
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    /* CARD IMG */
+    .card img{
+        height: 180px;
+    }
+
+    /* AUTH */
+    .auth-card{
+        padding: 1.5rem;
+    }
+
+    /* BOTONES */
+    .btn{
+        width: 100%;
+        padding: 1rem;
+    }
+
+    /* TABLAS → SCROLL HORIZONTAL */
+    table{
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* FOOTER */
+    footer{
+        margin-top: 60px;
+    }
+}
+
+
+/* ============================= */
+/* 📱 MOVIL PEQUEÑO */
+/* ============================= */
+
+@media (max-width: 420px){
+
+    .nav-logo{
+        font-size: 1.2rem;
+    }
+
+    .card img{
+        height: 150px;
+    }
+
+    .auth-card{
+        padding: 1.2rem;
+    }
+
+    th, td{
+        padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+}
